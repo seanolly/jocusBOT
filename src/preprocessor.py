@@ -1,17 +1,27 @@
 import json
-from sklearn.feature_extraction.text import CountVectorizer
-data = json.load(open('reddit_jokes.json'))
+from sklearn.feature_extraction.text import TfidfVectorizer
+jokeData = json.load(open('reddit_jokes.json'))
+normalTweetData = json.load(open('short.json'))
 
-vectorizer = CountVectorizer()
-
-#preprocesses joke data
-def preprocess(limit):
+#returns array of jokes
+def preprocessJoke(limit, jokeData):
     result = []
     for i in range(0, limit):
-        result.append(data[i]['title'] + " " + data[i]['body'])
+        result.append(jokeData[i]['title'] + " " + jokeData[i]['body'])
     return result
 
-result = preprocess(100)
-vectorizer.fit(result)
+#returns array of tweets
+def preprocessNormalTweets(limit , tweetData):
+    result = []
+    for i in range(0, limit):
+        result.append(tweetData[i]['content'])
+    return result
+
+def labelData(data, label):
+    result = []
+    for i in range(0, len(data)):
+        result.append(label)
+    return result
+
 
 
