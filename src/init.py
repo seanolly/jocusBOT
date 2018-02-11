@@ -15,6 +15,9 @@ twitter = Twython(consumer_key,
                   access_token,
                   access_token_secret)
 
+JOKE_CODE = 1
+NOT_JOKE_CODE = 0
+
 import stopwords as stopwords
 
 from authentication import (consumer_key, consumer_secret, access_token, access_token_secret)
@@ -48,8 +51,7 @@ def initFeatures(limit):
     exclusion = stopwords.get_stopwords('english')
 
     # vectorizer
-    vectorizer = CountVectorizer(stop_words=exclusion)
-
+    vectorizer = TfidfVectorizer(stop_words=exclusion)
     jokes = preprocessJoke(limit, jokeData)
     jokeLabels = labelData(jokes, 1) #1 is joke
     print ("Joke Labels length:", len(jokeLabels))
@@ -71,7 +73,6 @@ def initFeatures(limit):
 ##transform tweets to vector, make prediction
 def makePrediction(classifier, vectorizer, tweets):
     transformedTweets = vectorizer.transform(tweets).toarray()
-    print ("Transformed tweet: ", transformedTweets)
     prediction = classifier.predict((transformedTweets))
     return prediction
 
@@ -81,8 +82,7 @@ def run(data_limit):
     classifier, features_train, labels_train, vectorizer = initClassifier(data_limit)
 
     ##make prediction
-    prediction = makePrediction(classifier, vectorizer, [])
+    prediction = makePrediction(classifier, vectorizer, ["Jokes lol hahaha barber"])
     print prediction
-
 
 run(2000)
