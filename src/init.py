@@ -9,11 +9,11 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_selection import SelectPercentile, f_classif
 from sklearn.naive_bayes import GaussianNB
 #initialize twitter account credentials
+from sklearn.feature_selection import SelectPercentile
 twitter = Twython(consumer_key,
                   consumer_secret,
                   access_token,
                   access_token_secret)
-
 
 import stopwords as stopwords
 
@@ -21,7 +21,6 @@ from authentication import (consumer_key, consumer_secret, access_token, access_
 import numpy as np
 from twython import Twython
 from sklearn.naive_bayes import MultinomialNB
-
 from preprocessor import preprocessNormalTweets, preprocessJoke, jokeData, normalTweetData, labelData
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_selection import SelectPercentile, f_classif
@@ -34,8 +33,15 @@ twitter = Twython(consumer_key,
                   access_token,
                   access_token_secret)
 
+##initiate classifier, features, labels, and vectorizer.
+def initClassifier(data_limit):
+    features_train, labels_train, vectorizer = initFeatures(data_limit)
+    classifier = GaussianNB()
+    classifier.fit(features_train, labels_train)
+    return classifier, features_train, labels_train, vectorizer
 
 
+##preprocess training data
 def initFeatures(limit):
     ### text vectorization--go from strings to lists of numbers
     # words to exclude
@@ -60,23 +66,23 @@ def initFeatures(limit):
     training_features = jokes + tweets
     print ("training feature length:", len(training_features))
     transformedFeatures = vectorizer.fit_transform(training_features).toarray()
-
     return transformedFeatures, training_labels, vectorizer
 
-def makePrediction(vectorizer,features_train,labels_train, tweets):
-    classifier = GaussianNB()
-    classifier.fit(features_train, labels_train)
+##transform tweets to vector, make prediction
+def makePrediction(classifier, vectorizer, tweets):
     transformedTweets = vectorizer.transform(tweets).toarray()
     print ("Transformed tweet: ", transformedTweets)
     prediction = classifier.predict((transformedTweets))
     return prediction
 
-
-
+##main
 def run(data_limit):
-    #get features, labels
-    features_train, labels_train,vectorizer = initFeatures(2040)
-    prediction = makePrediction(vectorizer, features_train, labels_train, ["The governor of England"])
+    ##initiate classifier, fit data
+    classifier, features_train, labels_train, vectorizer = initClassifier(data_limit)
+
+    ##make prediction
+    prediction = makePrediction(classifier, vectorizer, [])
     print prediction
 
-run(1000)
+
+run(2000)
