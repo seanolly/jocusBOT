@@ -1,5 +1,5 @@
 # jocusBOT (2018)
-JocusBot is a twitter bot created with the Twitter API, that utilizes Naive Bayes(sklearn), a popular algorithm used for text-learning,
+JocusBot is a twitter bot created with the Twitter API, that utilizes Multinomial Naive Bayes(sklearn), a popular algorithm used for text-learning,
 to determine whether inputted tweet content contains a joke or not - trained by data from a term frequency inverse document frequency(TFIDF) vectorizer that uses a corpus
 of 200k English Jokes and 200k 'normal' tweets.' Limited testing has been done for accuracy.
 

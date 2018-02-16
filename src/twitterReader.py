@@ -6,7 +6,6 @@ import itertools
 from preprocessor import preprocessNormalTweets, preprocessJoke, jokeData, normalTweetData, labelData
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_selection import SelectPercentile, f_classif
-from sklearn.naive_bayes import GaussianNB
 #initialize twitter account credentials
 from sklearn.feature_selection import SelectPercentile
 
@@ -23,7 +22,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_selection import SelectPercentile, f_classif
 import nltk.corpus
 from nltk.stem import snowball
-from sklearn.naive_bayes import GaussianNB
 
 
 class Streamer(TwythonStreamer):
@@ -41,7 +39,7 @@ class Streamer(TwythonStreamer):
     ##initiate classifier, features, labels, and vectorizer.
     def initClassifier(self):
         features_train, labels_train, vectorizer = Streamer.initFeatures(self)
-        classifier = GaussianNB()
+        classifier = MultinomialNB()
         classifier.fit(features_train, labels_train)
         return classifier, features_train, labels_train, vectorizer
 
@@ -81,9 +79,10 @@ class Streamer(TwythonStreamer):
         if 'text' in data and 'user' in data and 'screen_name' in data['user']:
             screen_name = data['user']['screen_name']
             content = data['text']
+            print "SCREEN NAME:", screen_name
+            print "TWEET:", content
             prediction = self.makePrediction(self.classifier, self.vectorizer, [data['text']])
             self.predictionMSG(screen_name, prediction)
-            print screen_name, content, prediction
 
     def on_error(self, status_code, data):
         print "ERROR!!!"
