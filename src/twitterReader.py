@@ -2,7 +2,6 @@ import numpy as np
 from twython import TwythonStreamer
 from twython import Twython
 import itertools
-
 from preprocessor import preprocessNormalTweets, preprocessJoke, jokeData, normalTweetData, labelData
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_selection import SelectPercentile, f_classif
@@ -26,7 +25,7 @@ from nltk.stem import snowball
 
 class Streamer(TwythonStreamer):
 
-    DATA_LIMIT = 2000
+    DATA_LIMIT = 20000
 
     def init(self, consumer_key, consumer_secret, access_token, access_token_secret):
         classifier, features_train, labels_train, vectorizer = self.initClassifier()
